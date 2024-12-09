@@ -1,0 +1,265 @@
+{
+	"info": {
+		"_postman_id": "bf64b43b-48fe-4875-bd0c-bad7c054a268",
+		"name": "APIGoRestCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40290762"
+	},
+	"item": [
+		{
+			"name": "AddingUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Se ha creado el registro correctamente con el id: \", function() {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var userIdentification = jsonData.id;\r",
+							"    var userGender = jsonData.gender;\r",
+							"\r",
+							"    console.log(jsonData);\r",
+							"    console.log(userIdentification);\r",
+							"    pm.collectionVariables.set(\"userid\", userIdentification);\r",
+							"\r",
+							"    pm.expect(userIdentification).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"    var correo = \"cotorra.benitez@15ce.com\";\r",
+							"pm.test(\"El campo correo es \" + correo, function() {\r",
+							"    pm.expect(pm.response.json().email).to.equal(\"cotorra.benitez@15ce.com\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Cotorra Benitez\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"cotorra.benitez@15ce.com\",\r\n    \"status\": \"active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROTOCOLO}}://{{GO-REST}}/public/{{VERSION}}/users",
+					"protocol": "{{PROTOCOLO}}",
+					"host": [
+						"{{GO-REST}}"
+					],
+					"path": [
+						"public",
+						"{{VERSION}}",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GettingUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verificando el Id \", function() {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var userIdentification = jsonData[\"0\"].id;\r",
+							"    pm.collectionVariables.set(\"userid\", userIdentification);\r",
+							"    var collection_vble_id = pm.collectionVariables.get(\"userid\");\r",
+							"\r",
+							"    console.log(userIdentification);\r",
+							"    console.log(collection_vble_id);\r",
+							"\r",
+							"    pm.expect(userIdentification).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{PROTOCOLO}}://{{GO-REST}}/public/{{VERSION}}/users?email=cotorra.benitez@15ce.com",
+					"protocol": "{{PROTOCOLO}}",
+					"host": [
+						"{{GO-REST}}"
+					],
+					"path": [
+						"public",
+						"{{VERSION}}",
+						"users"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "cotorra.benitez@15ce.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UptatingUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"    var strname = \"Cotorra Jr Benitez Alvarez\";\r",
+							"pm.test(\"El nombre actualizado es \" + strname, function() {\r",
+							"    pm.expect(pm.response.json().name).to.equal(strname);\r",
+							"});\r",
+							"\r",
+							"var strstatus = \"inactive\";\r",
+							"pm.test(\"El nuevo estado del registro es \" + strstatus, function() {\r",
+							"    pm.expect(pm.response.json().status).to.equal(strstatus);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Cotorra Jr Benitez Alvarez\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"cotorra.benitez@15ce.com\",\r\n    \"status\": \"inactive\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROTOCOLO}}://{{GO-REST}}/public/{{VERSION}}/users/{{userid}}",
+					"protocol": "{{PROTOCOLO}}",
+					"host": [
+						"{{GO-REST}}"
+					],
+					"path": [
+						"public",
+						"{{VERSION}}",
+						"users",
+						"{{userid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RemovingUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    console.log(pm.collectionVariables.get(\"userid\"));\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{PROTOCOLO}}://{{GO-REST}}/public/{{VERSION}}/users/{{userid}}",
+					"protocol": "{{PROTOCOLO}}",
+					"host": [
+						"{{GO-REST}}"
+					],
+					"path": [
+						"public",
+						"{{VERSION}}",
+						"users",
+						"{{userid}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "59b417a18ef3fdaea8ffdcf34c3c28cf6c1b277701b02d9985a31f83d6326afa",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "userid",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
